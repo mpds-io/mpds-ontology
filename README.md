@@ -1,10 +1,10 @@
-# MPDS neuro-symbolic data mining (upstream: mpds-io/mpds-ontology)
+# MPDS neuro-symbolic data mining
 
 # aiida-reharness ontology extension
 
 An additive extension of the [MPDS materials ontology](https://github.com/mpds-io/mpds-ontology)
-(`mpds_ontology.rdf`, imported unchanged) that encodes the **/data/aiida-reharness** project
-ideas plus the lab's collected operational experience, so that campaign plans can be
+(`mpds_ontology.rdf`, imported unchanged) that encodes the **aiida-reharness** project's
+ontology plus the lab's collected operational experience, so that campaign plans can be
 *reasoned about* before compute is spent.
 
 ## Layout
@@ -18,9 +18,9 @@ scratch/                       # working notes (pitfalls_full.md = extracted cor
 ```
 
 `aiida_reharness.rdf` is **generated** — all edits go into `gen_aiida_reharness.py`,
-then `python3 gen_aiida_reharness.py`. The base ontology is never modified: the
+then `python3 gen_aiida_reharness.py`. The base ontology is better to leave unmodified: the
 extension only *adds* axioms about base individuals (e.g. `Gd` is additionally
-typed `HeavyElement`).
+typed `HeavyElement`), however the edits into base are possible.
 
 ## The three layers
 
@@ -81,6 +81,3 @@ python3 gen_aiida_reharness.py
 # validate against FaCT++ (needs pyfactxx built from the refactoring-synthesis branch)
 python3 validate_aiida_reharness.py
 ```
-
-pyfactxx lives at `~/work/pyfactxx-refsynth` (venv `.venv`, branch
-`refactoring-synthesis` @ 94efdc3, pyfactxx 1.9.0, 79/79 tests green).
