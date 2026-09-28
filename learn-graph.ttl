@@ -1,0 +1,115 @@
+# learn-graph.ttl — self-improving graph: axiom deltas accepted via the
+# reharness `learn` pipeline (agent-proposed, dual-backend-validated,
+# human-approved). Additive over aiida_reharness.rdf; never curated by hand.
+@prefix : <https://mpds.io/ontology#> .
+@prefix base: <http://www.semanticweb.org/ivan/ontologies/2024/0/ontomat#> .
+@prefix owl: <http://www.w3.org/2002/07/owl#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+
+
+# ── accepted 2026-09-27T20:32:51.494Z ──
+@prefix base: <http://www.semanticweb.org/ivan/ontologies/2024/0/ontomat#> .
+@prefix ext: <https://mpds.io/ontology#> .
+@prefix owl: <http://www.w3.org/2002/07/owl#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+
+ext:SCFStage a owl:Class ;
+    rdfs:subClassOf ext:WorkChainStep ;
+    rdfs:comment "Converged-SCF stage (fleur.mpds or crystal.mpds). Precondition step: every property workflow reading a converged charge density must start from one of these (pitfalls 30, 22)." .
+
+ext:MAEStage a owl:Class ;
+    rdfs:subClassOf ext:WorkChainStep ;
+    rdfs:comment "Magnetic-anisotropy stage: magnetization-rotation scan with spin-orbit coupling on the converged density." .
+
+ext:EOSStage a owl:Class ;
+    rdfs:subClassOf ext:WorkChainStep ;
+    rdfs:comment "Equation-of-state stage: volume scan of the relaxed cell; the E(V) fit yields the bulk modulus." .
+
+ext:ForceStage a owl:Class ;
+    rdfs:subClassOf ext:WorkChainStep ;
+    rdfs:comment "Force/stress stage: single-point forces and stress tensor on the converged density." .
+
+ext:PhononStage a owl:Class ;
+    rdfs:subClassOf ext:WorkChainStep ;
+    rdfs:comment "Phonon stage: finite-displacement frequency calculation; requires the fully relaxed geometry, imaginary modes route back to geometry optimization (pitfalls 25, 27)." .
+
+ext:MAEWorkflow a owl:Class ;
+    rdfs:subClassOf ext:ComputationalWorkflow ;
+    rdfs:comment "Magnetic anisotropy energy: converged SCF, then the magnetization-rotation scan, then the MAE convergence gate." .
+
+ext:EOSWorkflow a owl:Class ;
+    rdfs:subClassOf ext:ComputationalWorkflow ;
+    rdfs:comment "Equation of state / bulk modulus: relaxed and converged SCF, then the volume scan." .
+
+ext:ForceWorkflow a owl:Class ;
+    rdfs:subClassOf ext:ComputationalWorkflow ;
+    rdfs:comment "Atomic forces (and stress): converged SCF on the relaxed geometry, then the single-point force evaluation." .
+
+ext:wc_fleur_scf a ext:SCFStage .
+
+ext:wc_crystal_scf a ext:SCFStage .
+
+ext:wc_fleur_mae a ext:WorkChainStep, ext:MAEStage ;
+    rdfs:comment "fleur.mae: MAE magnetization-rotation scan with spin-orbit coupling; consumes the converged SCF wavefunction." .
+
+ext:wc_fleur_mae_conv a ext:WorkChainStep, ext:MAEStage ;
+    rdfs:comment "fleur.mae_conv: convergence check of the MAE rotation scan; the anisotropy is reported only after it passes." .
+
+ext:wc_fleur_eos a ext:WorkChainStep, ext:EOSStage ;
+    rdfs:comment "fleur.eos: volume scan of the relaxed cell; equation of state and bulk modulus from the E(V) fit." .
+
+ext:wc_fleur_forces a ext:WorkChainStep, ext:ForceStage ;
+    rdfs:comment "fleur.forces: single-point forces and stress tensor on the converged density of the relaxed geometry." .
+
+ext:wc_phonopy_fleur a ext:WorkChainStep, ext:PhononStage ;
+    rdfs:comment "phonopy.fleur: finite-displacement phonon frequencies via phonopy on the FLEUR engine; requires the fully relaxed geometry." .
+
+ext:wf_fleur_mae a ext:MAEWorkflow ;
+    ext:hasStep ext:wc_fleur_scf, ext:wc_fleur_mae, ext:wc_fleur_mae_conv ;
+    rdfs:comment "FLEUR route: fleur.mpds SCF + relaxation, then the MAE rotation scan, then the MAE convergence gate." .
+
+ext:wf_fleur_eos a ext:EOSWorkflow ;
+    ext:hasStep ext:wc_fleur_scf, ext:wc_fleur_eos ;
+    rdfs:comment "FLEUR route: fleur.mpds SCF + geometry optimization, then the EOS volume scan." .
+
+ext:wf_fleur_forces a ext:ForceWorkflow ;
+    ext:hasStep ext:wc_fleur_scf, ext:wc_fleur_forces ;
+    rdfs:comment "FLEUR route: fleur.mpds SCF + relaxation, then the force/stress evaluation." .
+
+ext:wf_fleur_phonon a ext:PhononWorkflow ;
+    ext:hasStep ext:wc_fleur_scf, ext:wc_phonopy_fleur ;
+    rdfs:comment "FLEUR/phonopy route: converged SCF + fully relaxed geometry, then phonopy finite displacements; complements the existing CRYSTAL FREQCALC route." .
+
+ext:prop_magnetic_anisotropy a base:Property ;
+    base:hasName "Magnetic anisotropy energy"^^xsd:string ;
+    base:hasCategory "magnetic"^^xsd:string ;
+    base:hasUnits "meV/formula unit"^^xsd:string ;
+    base:hasDomain "magnetism"^^xsd:string ;
+    ext:realizedBy ext:wf_fleur_mae ;
+    rdfs:comment "Anisotropy energy from the magnetization-rotation scan; easy-axis orientation follows the minimum of the E(phi) curve." .
+
+ext:prop_bulk_modulus a base:Property ;
+    base:hasName "Bulk modulus"^^xsd:string ;
+    base:hasCategory "mechanical"^^xsd:string ;
+    base:hasUnits "GPa"^^xsd:string ;
+    base:hasDomain "mechanics"^^xsd:string ;
+    ext:realizedBy ext:wf_fleur_eos ;
+    rdfs:comment "Isothermal bulk modulus from the equation-of-state fit of the volume scan." .
+
+ext:prop_forces a base:Property ;
+    base:hasName "Atomic forces and stress"^^xsd:string ;
+    base:hasCategory "mechanical"^^xsd:string ;
+    base:hasUnits "eV/angstrom (forces), GPa (stress)"^^xsd:string ;
+    base:hasDomain "mechanics"^^xsd:string ;
+    ext:realizedBy ext:wf_fleur_forces ;
+    rdfs:comment "Single-point forces and stress tensor on the converged density of the relaxed geometry." .
+
+ext:prop_phonon_spectrum a base:Property ;
+    base:hasName "Phonon spectrum"^^xsd:string ;
+    base:hasCategory "vibrational"^^xsd:string ;
+    base:hasUnits "THz"^^xsd:string ;
+    base:hasDomain "vibrations"^^xsd:string ;
+    ext:realizedBy ext:wf_crystal_phonon, ext:wf_fleur_phonon ;
+    rdfs:comment "Vibrational frequencies (phonon bands); imaginary modes route back to the geometry-optimization precondition (pitfalls 25, 27)." .
+

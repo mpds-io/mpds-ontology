@@ -1,0 +1,794 @@
+@prefix : <https://mpds.io/ontology#> .
+@prefix owl: <http://www.w3.org/2002/07/owl#> .
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+
+<http://www.semanticweb.org/ivan/ontologies/2024/0/ontomat#Ac> a :HeavyElement .
+
+<http://www.semanticweb.org/ivan/ontologies/2024/0/ontomat#Am> a :HeavyElement .
+
+<http://www.semanticweb.org/ivan/ontologies/2024/0/ontomat#Ba> a :LargeMTSphereElement .
+
+<http://www.semanticweb.org/ivan/ontologies/2024/0/ontomat#Bk> a :HeavyElement .
+
+<http://www.semanticweb.org/ivan/ontologies/2024/0/ontomat#Ce> a :HeavyElement .
+
+<http://www.semanticweb.org/ivan/ontologies/2024/0/ontomat#Cf> a :HeavyElement .
+
+<http://www.semanticweb.org/ivan/ontologies/2024/0/ontomat#Cm> a :HeavyElement .
+
+<http://www.semanticweb.org/ivan/ontologies/2024/0/ontomat#Cs> a :LargeMTSphereElement .
+
+<http://www.semanticweb.org/ivan/ontologies/2024/0/ontomat#Dy> a :HeavyElement .
+
+<http://www.semanticweb.org/ivan/ontologies/2024/0/ontomat#Er> a :HeavyElement .
+
+<http://www.semanticweb.org/ivan/ontologies/2024/0/ontomat#Es> a :HeavyElement .
+
+<http://www.semanticweb.org/ivan/ontologies/2024/0/ontomat#Eu> a :HeavyElement .
+
+<http://www.semanticweb.org/ivan/ontologies/2024/0/ontomat#Fm> a :HeavyElement .
+
+<http://www.semanticweb.org/ivan/ontologies/2024/0/ontomat#Gd> a :HeavyElement .
+
+<http://www.semanticweb.org/ivan/ontologies/2024/0/ontomat#Ho> a :HeavyElement .
+
+<http://www.semanticweb.org/ivan/ontologies/2024/0/ontomat#K> a :LargeMTSphereElement .
+
+<http://www.semanticweb.org/ivan/ontologies/2024/0/ontomat#La> a :HeavyElement .
+
+<http://www.semanticweb.org/ivan/ontologies/2024/0/ontomat#Lr> a :HeavyElement .
+
+<http://www.semanticweb.org/ivan/ontologies/2024/0/ontomat#Lu> a :HeavyElement .
+
+<http://www.semanticweb.org/ivan/ontologies/2024/0/ontomat#Md> a :HeavyElement .
+
+<http://www.semanticweb.org/ivan/ontologies/2024/0/ontomat#Nd> a :HeavyElement .
+
+<http://www.semanticweb.org/ivan/ontologies/2024/0/ontomat#No> a :HeavyElement .
+
+<http://www.semanticweb.org/ivan/ontologies/2024/0/ontomat#Np> a :HeavyElement .
+
+<http://www.semanticweb.org/ivan/ontologies/2024/0/ontomat#Pa> a :HeavyElement .
+
+<http://www.semanticweb.org/ivan/ontologies/2024/0/ontomat#Pm> a :HeavyElement .
+
+<http://www.semanticweb.org/ivan/ontologies/2024/0/ontomat#Pr> a :HeavyElement .
+
+<http://www.semanticweb.org/ivan/ontologies/2024/0/ontomat#Pu> a :HeavyElement .
+
+<http://www.semanticweb.org/ivan/ontologies/2024/0/ontomat#Rb> a :LargeMTSphereElement .
+
+<http://www.semanticweb.org/ivan/ontologies/2024/0/ontomat#Sm> a :HeavyElement .
+
+<http://www.semanticweb.org/ivan/ontologies/2024/0/ontomat#Tb> a :HeavyElement .
+
+<http://www.semanticweb.org/ivan/ontologies/2024/0/ontomat#Th> a :HeavyElement .
+
+<http://www.semanticweb.org/ivan/ontologies/2024/0/ontomat#Tm> a :HeavyElement .
+
+<http://www.semanticweb.org/ivan/ontologies/2024/0/ontomat#U> a :HeavyElement .
+
+<http://www.semanticweb.org/ivan/ontologies/2024/0/ontomat#Yb> a :HeavyElement .
+
+:AiiDAWorkChain a owl:Class ;
+    rdfs:comment "fleur.mpds / crystal.mpds / CDGFleurSCFOptimizer via the yascheduler computer. Provenance, caching, restart." ;
+    rdfs:subClassOf :SubmitChannel ;
+    owl:disjointWith :DirectYaschedulerAPI .
+
+:AllTasksExit412 a owl:Class ;
+    rdfs:comment "DEPRECATED indirection: FaCT++ realisation does not classify instances into forall-defined classes (verified empirically), so this class carries no equivalentClass axiom. The all-tasks-exit-412 check is a plan-bUILDER assertion (hasAllTasksExit412), asserted closed-world from the observed task states." ;
+    rdfs:subClassOf :CampaignPlan .
+
+:Anderson a :MixingScheme ;
+    rdfs:comment "Default choice: alpha 0.15 converges NiZn in 17 iterations (pitfall 22b)." ;
+    owl:disjointWith :Broyden1,
+        :Broyden2,
+        :Straight .
+
+:Broyden2OnFLEUR62 a owl:Class ;
+    rdfs:comment "Same trap with Broyden2 (pitfall 15)." ;
+    rdfs:subClassOf :CalculationTask ;
+    owl:equivalentClass [ a owl:Class ;
+            owl:intersectionOf ( :CalculationTask [ a owl:Restriction ;
+                        owl:hasValue :Broyden2 ;
+                        owl:onProperty :hasMixingScheme ] ) ] .
+
+:OrchestrationLayer a owl:Class ;
+    rdfs:comment "reharness FSM: code/agent leaves, wait states, guards, approval gates. Event-scale." ;
+    rdfs:subClassOf :FsmLayer ;
+    owl:disjointWith :ComputeLayer,
+        :ReasoningLayer .
+
+:PRDApprovedPlan a owl:Class ;
+    rdfs:comment "A plan whose PRD the human approved. The only plan a run may start (reharness: the human approves the intent, never the graph)." ;
+    rdfs:subClassOf [ a owl:Restriction ;
+            owl:hasValue true ;
+            owl:onProperty :prdApproved ],
+        :CampaignPlan .
+
+:PropertyTargetedPlan a owl:Class ;
+    rdfs:comment "A plan generated FROM a property-hierarchy entry (hasTargetProperty some base Property)." ;
+    rdfs:subClassOf :CampaignPlan ;
+    owl:equivalentClass [ a owl:Class ;
+            owl:intersectionOf ( :CampaignPlan [ a owl:Restriction ;
+                        owl:onProperty :hasTargetProperty ;
+                        owl:someValuesFrom <http://www.semanticweb.org/ivan/ontologies/2024/0/ontomat#Property> ] ) ] .
+
+:exit_0 a :AiiDAExitCodeFamily ;
+    rdfs:comment "Success." ;
+    owl:disjointWith :exit_303,
+        :exit_362,
+        :exit_3xx,
+        :exit_412,
+        :exit_497,
+        :exit_5xx .
+
+:hasDetectedClass a owl:ObjectProperty ;
+    rdfs:comment "The plan-level detection class that flags this failure mode pre-emptively (range: the detection classes above)." ;
+    rdfs:domain :EngineFailureMode .
+
+:hasEndpoint a owl:DatatypeProperty ;
+    rdfs:comment "Base URL of the OpenAI-compatible endpoint." ;
+    rdfs:domain :LLMEngine ;
+    rdfs:range xsd:string .
+
+:hasEvidenceCommand a owl:DatatypeProperty ;
+    rdfs:comment "Deterministic evidence-gathering command to run before concluding the mode." ;
+    rdfs:domain :EngineFailureMode ;
+    rdfs:range xsd:string .
+
+:hasExecutionMode a owl:ObjectProperty ;
+    rdfs:domain :CampaignPlan ;
+    rdfs:range :ExecutionMode .
+
+:hasFailureMode a owl:ObjectProperty ;
+    rdfs:domain :CalculationTask ;
+    rdfs:range :EngineFailureMode .
+
+:hasFix a owl:DatatypeProperty ;
+    rdfs:comment "The known fix: exact command or action, from the collected experience." ;
+    rdfs:domain :EngineFailureMode ;
+    rdfs:range xsd:string .
+
+:hasModelId a owl:DatatypeProperty ;
+    rdfs:comment "Model id at the OpenAI-compatible endpoint." ;
+    rdfs:domain :LLMEngine ;
+    rdfs:range xsd:string .
+
+:hasObservedExitCode a owl:ObjectProperty ;
+    rdfs:comment "Exit-code family typically observed for this failure mode." ;
+    rdfs:domain :EngineFailureMode ;
+    rdfs:range :AiiDAExitCodeFamily .
+
+:hasPitfallRef a owl:DatatypeProperty ;
+    rdfs:comment "Pitfall identifier in the collected experience (mpds-aiida skill taxonomy), e.g. 8c, 22b, 42-BSD." ;
+    rdfs:domain :EngineFailureMode ;
+    rdfs:range xsd:string .
+
+:hasRouting a owl:ObjectProperty ;
+    rdfs:comment "Where the FSM routes a failure of this mode: code / agent / approval / wait." ;
+    rdfs:domain :EngineFailureMode ;
+    rdfs:range :FsmStateKind .
+
+:hasSignature a owl:DatatypeProperty ;
+    rdfs:comment "Deterministic signature regexes (Python re syntax) matched against failure text." ;
+    rdfs:domain :EngineFailureMode ;
+    rdfs:range xsd:string .
+
+:hasSignatureText a owl:DatatypeProperty ;
+    rdfs:comment "Raw failure text (engine error line, parser message, log line) asserted for diagnosis." ;
+    rdfs:domain :Observation ;
+    rdfs:range xsd:string .
+
+:hasStep a owl:ObjectProperty ;
+    rdfs:comment "Composition: a workflow runs these workchain steps." ;
+    rdfs:domain :ComputationalWorkflow ;
+    rdfs:range :WorkChainStep .
+
+:hasYaschedulerKey a owl:DatatypeProperty ;
+    rdfs:comment "The yascheduler engine config section key ([engine.<key>])." ;
+    rdfs:domain :Engine ;
+    rdfs:range xsd:string .
+
+:home_server a :HomeServerNode .
+
+:linux a :Platform ;
+    owl:disjointWith :darwin .
+
+:mac_node a :MacNode .
+
+:pf_broyden_not_implemented a :InputPrepFailureMode,
+        :PhysicsFailureMode ;
+    rdfs:comment "The InputSchema lists Broyden1/2 as valid imix values but the build errors at startup." ;
+    :hasDetectedClass :BroydenOnFLEUR62 ;
+    :hasFix "Use Anderson mixing alpha=0.15 (or straight as last resort). Broyden1/Broyden2 are NOT implemented in the FLEUR 6.2 build."^^xsd:string ;
+    :hasPitfallRef "15"^^xsd:string ;
+    :hasRouting :codeState ;
+    :hasSignature "Broyden 1/2 method not implemented"^^xsd:string .
+
+:pf_false_idle_occupancy a :InfraFailureMode ;
+    rdfs:comment "THE physics-vs-infra separation rule: verify evals ran before tuning SCF parameters." ;
+    :hasDetectedClass :InfraSignatureBatch ;
+    :hasEvidenceCommand "Verify evals actually ran: yac task rows for the eval calcjobs + iteration count in the retrieved out file, BEFORE tuning SCF parameters"^^xsd:string ;
+    :hasFix "BSD ps vs GNU :255 occupancy poll bug: false-idle node polls rmtree live task dirs on Darwin; engines die silently RC=2. Fixed in installed yascheduler 1.8.1 (kit /data/fleur_campaign/patches/). A uniform fast-412 batch with eval exit 0 = infra, not physics."^^xsd:string ;
+    :hasPitfallRef "42"^^xsd:string ;
+    :hasRouting :codeState ;
+    :hasSignature "uniform batch of fast 412s"^^xsd:string .
+
+:pf_ghost_states a :ConvergenceFailureMode,
+        :PhysicsFailureMode ;
+    rdfs:comment "Ghost states from core electrons of f-elements abort the run. Warning escalated to fatal by default." ;
+    :hasDetectedClass :NeedsJUDFTWarnOnly ;
+    :hasFix "Stage JUDFT_WARN_ONLY in the task dir before the engine run. AiiDA FleurCalculation stages it automatically (line 465-468 of calculation.fleur); direct yascheduler API must have touch JUDFT_WARN_ONLY in the spawn command."^^xsd:string ;
+    :hasObservedExitCode :exit_303 ;
+    :hasPitfallRef "8c"^^xsd:string ;
+    :hasRouting :codeState ;
+    :hasSignature "Too low eigenvalue detected"^^xsd:string .
+
+:pf_mt_sphere_confinement a :BasisSetFailureMode,
+        :PhysicsFailureMode ;
+    rdfs:comment "High-n s valence states cannot confine in inpgen-auto large MT spheres of Ba/Cs/Rb/K. Dominant mode behind dft.mpds.io geometry-optimization failures." ;
+    :hasDetectedClass :NeedsSphereCaps ;
+    :hasFix "Per-system MT-sphere radius caps via set_species (masci_tools): use EXACT species names from that system inp.xml (e.g. \"Barium (Ba)\"); caps live in per-system templates only, never shared base templates. Diagnose the failing species from the FLEUR \"out\" file, not from expectation."^^xsd:string ;
+    :hasObservedExitCode :exit_303 ;
+    :hasPitfallRef "37"^^xsd:string ;
+    :hasRouting :agentState ;
+    :hasSignature "differ 2: problems with solving dirac equation"^^xsd:string,
+        "too few nodes"^^xsd:string .
+
+:pf_orte_resource_exhaustion a :InfraFailureMode ;
+    rdfs:comment "Batch-vs-serial scheduling decision grounded in a measured crash rate." ;
+    :hasFix "Concurrent --oversubscribe Pcrystal tasks exhaust ORTE on small nodes: 17/37 crashed. Submit in batches of 5-10, match ncpus to physical cores, run campaigns serially."^^xsd:string ;
+    :hasPitfallRef "20"^^xsd:string ;
+    :hasRouting :codeState ;
+    :hasSignature "ORTE_ERROR_LOG: Out of resource"^^xsd:string,
+        "process killed \\(SIGTERM\\)"^^xsd:string .
+
+:pf_premature_done a :InfraFailureMode ;
+    rdfs:comment "DONE does not mean succeeded at either layer (pitfall 18/24)." ;
+    :hasFix "Task marked DONE after 7-14 iterations on an SSH-unstable node. Cross-reference yascheduler_tasks.status=2 vs the AiiDA process state; resubmit; if persistent, disable the unstable node in yascheduler_nodes."^^xsd:string ;
+    :hasPitfallRef "13"^^xsd:string ;
+    :hasRouting :codeState ;
+    :hasSignature "no </fleurOutput> closing tag"^^xsd:string .
+
+:pf_spawn_channel_hangup a :InfraFailureMode ;
+    rdfs:comment "Without nohup the engine dies after 1-3 SCF iterations; yascheduler still marks DONE." ;
+    :hasDetectedClass :DirectFLEURSubmit ;
+    :hasFix "nohup is REQUIRED in the yascheduler spawn command: run_bg creates the process on an SSH channel that is killed when the poll cycle reaps it. Never quote the live [engine.fleur] spawn from memory (pitfall 11): read it from /etc/yascheduler/yascheduler.conf."^^xsd:string ;
+    :hasPitfallRef "31"^^xsd:string ;
+    :hasRouting :codeState ;
+    :hasSignature "completed after 1 iterations"^^xsd:string,
+        "truncated mid-iteration"^^xsd:string .
+
+:pf_stale_waiting_wedge a :InfraFailureMode ;
+    rdfs:comment "Campaign driver precondition, checked pre-launch, not post-mortem." ;
+    :hasFix "A stale waiting workchain of type fleur.mpds silently wedges the serial campaign driver: its submit gate counts active workchains. Clean waiting processes BEFORE launching a campaign (verdi process repair; kill remaining via ProcessNode set_exit_status(130) + seal; DROP the exit_status filter on sealed nodes)."^^xsd:string ;
+    :hasObservedExitCode :exit_412 ;
+    :hasPitfallRef "33"^^xsd:string ;
+    :hasRouting :codeState .
+
+:pf_straight_too_conservative a :ConvergenceFailureMode,
+        :PhysicsFailureMode ;
+    rdfs:comment "PR #20 straight-mixing scheme evaluated and REFUTED on SrTiO3/GdNi/NiZn." ;
+    :hasFix "Anderson alpha=0.15 (OLD scheme) converges NiZn in 17 iterations; straight alpha=0.05 stuck at 40-260 Htr. Straight-mixing 2x300 does NOT rescue 412/497 hard systems (attempt-2 reproduced attempt-1 exactly)."^^xsd:string ;
+    :hasObservedExitCode :exit_362 ;
+    :hasPitfallRef "22b"^^xsd:string ;
+    :hasRouting :agentState ;
+    :hasSignature "DID_NOT_CONVERGE"^^xsd:string .
+
+:pf_truncated_outxml a :InfraFailureMode ;
+    rdfs:comment "Missing shell.out/out.error warnings are a RED HERRING: the parser only warns on those." ;
+    :hasEvidenceCommand "sudo PGPASSWORD= /data/pg/bin/psql -h localhost -U postgres -d aiida -c \"...\" and yascheduler_tasks.metadata->>error for SSH failure records; compare retrieved FolderData content"^^xsd:string ;
+    :hasFix "Root cause chain: SSH drop mid-write (pitfall 13/39) or spawn-channel hangup (pitfall 31) -> truncated out.xml -> masci_tools first parse consumes the handle at EOF (pitfall 33: wrap in seek(0)) -> exit 303. Resubmit; check yascheduler metadata for the SSH failure before tuning anything."^^xsd:string ;
+    :hasObservedExitCode :exit_303 ;
+    :hasPitfallRef "12"^^xsd:string ;
+    :hasRouting :codeState ;
+    :hasSignature "Repairing was not possible"^^xsd:string,
+        "The out.xml file is broken"^^xsd:string .
+
+:pf_unit_cell_not_neutral a :BasisSetFailureMode,
+        :PhysicsFailureMode ;
+    rdfs:comment "A basis problem, not a runtime issue: the cell is fine, the assigned bases are not." ;
+    :hasFix "Basis set charge mismatch (MPDSBSL_NEUTRAL_6TH family): Yb-containing perovskites with certain oxidation states. Custom basis assignments or different oxidation states needed per composition."^^xsd:string ;
+    :hasPitfallRef "19"^^xsd:string ;
+    :hasRouting :agentState ;
+    :hasSignature "INPBAS \\*\\*\\*\\* UNIT CELL NOT NEUTRAL"^^xsd:string .
+
+:pf_unverified_method_claim a :DiagnosticsGap ;
+    rdfs:comment "Methodology gate: untested method claims route to human approval." ;
+    :hasFix "Do NOT claim DFT+HIA/DFT+U is required for 4f systems without testing plain PBE first. GdNi: the actual issue was itmax 50 vs 200 and wrong alpha. 4f occupation fluctuation keeping distance at 1e-3..1e-4 is NORMAL; gate on held-out accuracy, not SatAgg (single-run sat is degenerate)."^^xsd:string ;
+    :hasPitfallRef "9"^^xsd:string ;
+    :hasRouting :approvalState .
+
+:pf_walltime_keyerror a :InfraFailureMode ;
+    rdfs:comment "Truncated out.xml yields partial output_parameters; bracket access Excepts the SCF workchain." ;
+    :hasFix "Guard parser-derived keys: output_parameters.get(\"walltime\", 0) at scf.py line 696, and or 0 / .get(...) at every subtraction site in get_res. Patched in installed aiida_fleur (backup at .bak)."^^xsd:string ;
+    :hasObservedExitCode :exit_497 ;
+    :hasPitfallRef "35"^^xsd:string ;
+    :hasRouting :codeState ;
+    :hasSignature "KeyError: 'walltime'"^^xsd:string,
+        "unsupported operand type\\(s\\) for -: 'NoneType' and 'NoneType'"^^xsd:string .
+
+:pf_wbecke_neighbor_list a :BasisSetFailureMode,
+        :PhysicsFailureMode ;
+    rdfs:comment "Public-keyword limitations on the Mac arm64 build." ;
+    :hasFix "LIMBEK is absent from the CRYSTAL23 public build (like CYCLES: use MAXCYCLE). For covalent solids: HF has no Becke grid, but diffuse bases (pob-DZVP-rev2, 6-21G*) may then hit BASIS SET LINEARLY DEPENDENT. MgO DFT-PBE works; Si diamond needs HF."^^xsd:string ;
+    :hasPitfallRef "26"^^xsd:string ;
+    :hasRouting :agentState ;
+    :hasSignature "WBECKE_F NEIGHBOR LIST TOO BIG"^^xsd:string .
+
+:pf_xinclude_not_flattened a :InputPrepFailureMode,
+        :PhysicsFailureMode ;
+    rdfs:comment "yascheduler only ships input_files: un-flattened XIncludes reference missing files." ;
+    :hasFix "inpgen emits xi:include tags (NOT self-closing: href=\"kpts.xml\"> </xi:include>). Flatten all XIncludes into one self-contained inp.xml before submitting directly; assert len(re.findall(xi:include, inp_xml)) == 0. AiiDA FleurinpData flattens automatically."^^xsd:string ;
+    :hasPitfallRef "1"^^xsd:string ;
+    :hasRouting :codeState ;
+    :hasSignature "XML document cannot be validated against Schema"^^xsd:string .
+
+:realizedBy a owl:ObjectProperty ;
+    rdfs:comment "A base Property individual is realized by this workflow (asserted additively on base individuals)." ;
+    rdfs:domain <http://www.semanticweb.org/ivan/ontologies/2024/0/ontomat#Property> ;
+    rdfs:range :ComputationalWorkflow .
+
+:runsOn a owl:ObjectProperty ;
+    rdfs:comment "yascheduler node the task deploys to." ;
+    rdfs:domain :CalculationTask ;
+    rdfs:range :ComputeNode .
+
+:serial a :ExecutionMode ;
+    rdfs:comment "One system at a time, one engine owning all cores. House preference for DFT campaigns." ;
+    owl:disjointWith :batch .
+
+:vultr_bm a :VultrBareMetalNode .
+
+:wf_crystal_phonon a :PhononWorkflow ;
+    rdfs:comment "CRYSTAL FREQCALC with PREOPTGEOM inside the block." ;
+    :hasStep :wc_crystal_scf,
+        :wc_phonon .
+
+:wf_crystal_seebeck a :SeebeckWorkflow ;
+    rdfs:comment "CRYSTAL route: crystal.mpds SCF then crystal.mpds_seebeck." ;
+    :hasStep :wc_crystal_scf,
+        :wc_crystal_seebeck .
+
+:wf_fleur_seebeck a :SeebeckWorkflow ;
+    rdfs:comment "FLEUR route: fleur.mpds SCF then fleur.dos_seebeck." ;
+    :hasStep :wc_fleur_dos,
+        :wc_fleur_scf .
+
+<https://mpds.io/ontology.rdf> a owl:Ontology ;
+    rdfs:comment "aiida-reharness extension for the MPDS materials ontology: computation, campaign-plan and experience layers. Additive-only over the base; generated by gen_aiida_reharness.py." ;
+    owl:imports <http://www.semanticweb.org/ivan/ontologies/2024/0/ontomat> .
+
+:BroydenOnFLEUR62 a owl:Class ;
+    rdfs:comment "Broyden1/2 mixing requested on the FLEUR 6.2 build: NOT implemented, the engine errors at startup (pitfall 15). Flagged by classification." ;
+    rdfs:subClassOf :CalculationTask ;
+    owl:equivalentClass [ a owl:Class ;
+            owl:intersectionOf ( :CalculationTask [ a owl:Restriction ;
+                        owl:hasValue :Broyden1 ;
+                        owl:onProperty :hasMixingScheme ] ) ] .
+
+:CRYSTAL a owl:Class ;
+    rdfs:comment "CRYSTAL23 public (Pcrystal MPI binary)." ;
+    rdfs:subClassOf :Engine .
+
+:ComputeLayer a owl:Class ;
+    rdfs:comment "AiiDA daemon: CalcJobs/WorkChains. Days-scale, provenance-tracked." ;
+    rdfs:subClassOf :FsmLayer ;
+    owl:disjointWith :ReasoningLayer .
+
+:DiagnosticsGap a owl:Class ;
+    rdfs:comment "Failure modes with signature ambiguity: must cross-reference BOTH databases and read output files before routing (pitfall 24: DONE does not mean succeeded, at either layer)." ;
+    rdfs:subClassOf :EngineFailureMode .
+
+:DirectFLEURSubmit a owl:Class ;
+    rdfs:comment "FLEUR task on the direct yascheduler API (no AiiDA staging): spawn must carry nohup and JUDFT_WARN_ONLY itself (pitfalls 31, 32). Gates: hasSpawnNohup AND hasMitigationJUDFTWarnOnly must both be true." ;
+    rdfs:subClassOf [ a owl:Restriction ;
+            owl:hasValue true ;
+            owl:onProperty :hasSpawnNohup ],
+        [ a owl:Restriction ;
+            owl:hasValue true ;
+            owl:onProperty :hasMitigationJUDFTWarnOnly ],
+        :CalculationTask ;
+    owl:equivalentClass [ a owl:Class ;
+            owl:intersectionOf ( :CalculationTask [ a owl:Restriction ;
+                        owl:hasValue :fleur ;
+                        owl:onProperty :hasEngine ] [ a owl:Restriction ;
+                        owl:hasValue :DirectYaschedulerAPI ;
+                        owl:onProperty :hasSubmitChannel ] ) ] .
+
+:FElementSystem a owl:Class ;
+    rdfs:comment "A system containing at least one f-element (lanthanide/actinide): JUDFT_WARN_ONLY required, 4f occupation fluctuation in SCF is normal (pitfalls 8c, 9)." ;
+    rdfs:subClassOf :DFTSystem ;
+    owl:equivalentClass [ a owl:Class ;
+            owl:intersectionOf ( :DFTSystem [ a owl:Restriction ;
+                        owl:onProperty :hasElement ;
+                        owl:someValuesFrom :HeavyElement ] ) ] .
+
+:FLEUR a owl:Class ;
+    rdfs:comment "FLEUR MaX 6.2. Only Anderson and straight mixing are implemented in this build." ;
+    rdfs:subClassOf :Engine .
+
+:HomeServerNode a owl:Class ;
+    rdfs:comment "Ubuntu home server, 16 physical cores, local yascheduler node." ;
+    rdfs:subClassOf :ComputeNode ;
+    owl:disjointWith :HetznerNode,
+        :MacNode,
+        :VultrBareMetalNode .
+
+:InfraSignatureBatch a owl:Class ;
+    rdfs:comment "A fast uniform 412 batch with every evaluator CalcJob at exit 0: infrastructure failure signature (pitfall 42). Never tune SCF parameters in response. hasAllTasksExit412 is a closed-world builder assertion (FaCT++ cannot classify into forall-defined classes)." ;
+    rdfs:subClassOf :CampaignPlan ;
+    owl:equivalentClass [ a owl:Class ;
+            owl:intersectionOf ( :CampaignPlan [ a owl:Restriction ;
+                        owl:onProperty :hasTask ;
+                        owl:someValuesFrom :TaskExit412 ] [ a owl:Restriction ;
+                        owl:hasValue true ;
+                        owl:onProperty :hasAllTasksExit412 ] [ a owl:Restriction ;
+                        owl:hasValue true ;
+                        owl:onProperty :hasBatchEvalExitZero ] ) ] .
+
+:Inpgen a owl:Class ;
+    rdfs:comment "FLEUR input generator." ;
+    rdfs:subClassOf :Engine .
+
+:LargeSphereCationSystem a owl:Class ;
+    rdfs:comment "A system containing Ba/Cs/Rb/K: inpgen auto-assigns large MT spheres, differ 2 at setup without per-system sphere caps (pitfall 37)." ;
+    rdfs:subClassOf :DFTSystem ;
+    owl:equivalentClass [ a owl:Class ;
+            owl:intersectionOf ( :DFTSystem [ a owl:Restriction ;
+                        owl:onProperty :hasElement ;
+                        owl:someValuesFrom :LargeMTSphereElement ] ) ] .
+
+:NeedsJUDFTWarnOnly a owl:Class ;
+    rdfs:comment "Task over an f-element system: JUDFT_WARN_ONLY is REQUIRED (pitfall 8c). Gate: hasMitigationJUDFTWarnOnly must be true, else INCONSISTENT." ;
+    rdfs:subClassOf [ a owl:Restriction ;
+            owl:hasValue true ;
+            owl:onProperty :hasMitigationJUDFTWarnOnly ],
+        :CalculationTask ;
+    owl:equivalentClass [ a owl:Class ;
+            owl:intersectionOf ( :CalculationTask [ a owl:Restriction ;
+                        owl:onProperty :hasSystem ;
+                        owl:someValuesFrom :FElementSystem ] ) ] .
+
+:NeedsSphereCaps a owl:Class ;
+    rdfs:comment "Task over a Ba/Cs/Rb/K system: per-system MT-sphere caps REQUIRED (pitfall 37). Gates: hasMitigationSphereCaps AND hasPerSystemTemplates must both be true." ;
+    rdfs:subClassOf [ a owl:Restriction ;
+            owl:hasValue true ;
+            owl:onProperty :hasPerSystemTemplates ],
+        [ a owl:Restriction ;
+            owl:hasValue true ;
+            owl:onProperty :hasMitigationSphereCaps ],
+        :CalculationTask ;
+    owl:equivalentClass [ a owl:Class ;
+            owl:intersectionOf ( :CalculationTask [ a owl:Restriction ;
+                        owl:onProperty :hasSystem ;
+                        owl:someValuesFrom :LargeSphereCationSystem ] ) ] .
+
+:Observation a owl:Class ;
+    rdfs:comment "A runtime observation asserted for diagnosis: exit code, output signature, elements seen." ;
+    rdfs:subClassOf :ComputationalArtefact .
+
+:PhononWorkflow a owl:Class ;
+    rdfs:comment "Phonon spectrum; imaginary modes route back to geometry optimization (pitfalls 25/27)." ;
+    rdfs:subClassOf :ComputationalWorkflow .
+
+:Straight a :MixingScheme ;
+    rdfs:comment "Too conservative for hard systems: stuck at 40-260 Htr distances (pitfalls 22b, 42)." ;
+    owl:disjointWith :Broyden1,
+        :Broyden2 .
+
+:TaskExit412 a owl:Class ;
+    rdfs:comment "A task whose observed exit-code family is 412." ;
+    rdfs:subClassOf :CalculationTask ;
+    owl:equivalentClass [ a owl:Class ;
+            owl:intersectionOf ( :CalculationTask [ a owl:Restriction ;
+                        owl:hasValue :exit_412 ;
+                        owl:onProperty :hasExitCodeFamily ] ) ] .
+
+:batch a :ExecutionMode ;
+    rdfs:comment "Concurrent submissions. OpenMPI resource exhaustion risk on small nodes (pitfall 20)." .
+
+:darwin a :Platform .
+
+:fleur a :FLEUR ;
+    rdfs:comment "The [engine.fleur] yascheduler engine: FLEUR MaX 6.2, platforms linux darwin." ;
+    owl:disjointWith :inpgen,
+        :pcrystal,
+        :qwen ;
+    :hasYaschedulerKey "fleur"^^xsd:string .
+
+:hasAllTasksExit412 a owl:DatatypeProperty,
+        owl:FunctionalProperty ;
+    rdfs:comment "Closed-world plan-builder assertion: every task in the plan observed at exit family 412. Computed by the validator from task states, not inferred by the reasoner (FaCT++ cannot classify into forall-defined classes)." ;
+    rdfs:domain :CampaignPlan ;
+    rdfs:range xsd:boolean .
+
+:hasBatchEvalExitZero a owl:DatatypeProperty,
+        owl:FunctionalProperty ;
+    rdfs:comment "True when every evaluator CalcJob in the observed batch finished exit 0 (pitfall 42-BSD: uniform fast 412s with clean evals = infra signature, not physics)." ;
+    rdfs:domain :CampaignPlan ;
+    rdfs:range xsd:boolean .
+
+:hasEngine a owl:ObjectProperty ;
+    rdfs:comment "Engine that runs the task." ;
+    rdfs:domain :CalculationTask ;
+    rdfs:range :Engine .
+
+:hasExitCodeFamily a owl:ObjectProperty ;
+    rdfs:comment "Derived exit-code family." ;
+    rdfs:domain :CalculationTask ;
+    rdfs:range :AiiDAExitCodeFamily .
+
+:hasMitigationSphereCaps a owl:DatatypeProperty,
+        owl:FunctionalProperty ;
+    rdfs:comment "Per-system MT-sphere radius caps applied via set_species (pitfall 37: inpgen auto-assigns large spheres to heavy 6s cations; differ 2 aborts at setup)." ;
+    rdfs:domain :CalculationTask ;
+    rdfs:range xsd:boolean .
+
+:hasPerSystemTemplates a owl:DatatypeProperty,
+        owl:FunctionalProperty ;
+    rdfs:comment "Species-level edits live in per-system templates, never in shared base templates (pitfall 38)." ;
+    rdfs:domain :CalculationTask ;
+    rdfs:range xsd:boolean .
+
+:hasSpawnNohup a owl:DatatypeProperty,
+        owl:FunctionalProperty ;
+    rdfs:comment "nohup present in the yascheduler spawn command (pitfall 31: run_bg kills the engine when the SSH poll cycle reaps the channel; symptom: 1-3 iterations then truncated out.xml)." ;
+    rdfs:domain :CalculationTask ;
+    rdfs:range xsd:boolean .
+
+:hasSubmitChannel a owl:ObjectProperty ;
+    rdfs:comment "AiiDA workchain vs direct API (pitfalls 17/18)." ;
+    rdfs:domain :CalculationTask ;
+    rdfs:range :SubmitChannel .
+
+:hasTargetProperty a owl:ObjectProperty ;
+    rdfs:comment "The material property the campaign computes — the hierarchy entry the plan is generated FROM." ;
+    rdfs:domain :CampaignPlan ;
+    rdfs:range <http://www.semanticweb.org/ivan/ontologies/2024/0/ontomat#Property> .
+
+:hasTask a owl:ObjectProperty ;
+    rdfs:domain :CampaignPlan ;
+    rdfs:range :CalculationTask .
+
+:pcrystal a :CRYSTAL ;
+    rdfs:comment "The [engine.pcrystal] yascheduler engine: Pcrystal MPI binary, CRYSTAL23." ;
+    owl:disjointWith :inpgen,
+        :qwen ;
+    :hasYaschedulerKey "pcrystal"^^xsd:string .
+
+:prdApproved a owl:DatatypeProperty,
+        owl:FunctionalProperty ;
+    rdfs:comment "The reharness PRD gate: the human approves the intent (PRD), never the FSM graph. Asserted true only after the human approved the PRD." ;
+    rdfs:domain :CampaignPlan ;
+    rdfs:range xsd:boolean .
+
+:wc_crystal_seebeck a :WorkChainStep ;
+    rdfs:comment "crystal.mpds_seebeck." .
+
+:wc_fleur_dos a :WorkChainStep ;
+    rdfs:comment "fleur.dos_seebeck: DOS + Seebeck from a converged SCF." .
+
+:wc_fleur_scf a :WorkChainStep ;
+    rdfs:comment "fleur.mpds SCF + geometry optimization (the campaign workhorse)." .
+
+:wc_phonon a :WorkChainStep ;
+    rdfs:comment "Phonon stage: FLEUR phonon workflow / CRYSTAL FREQCALC (+PREOPTGEOM INSIDE the FREQCALC block, never a sibling keyword)." .
+
+:ConvergenceFailureMode a owl:Class ;
+    rdfs:comment "SCF/geometry convergence." ;
+    rdfs:subClassOf :PhysicsFailureMode ;
+    owl:disjointWith :BasisSetFailureMode,
+        :InputPrepFailureMode .
+
+:DirectYaschedulerAPI a owl:Class ;
+    rdfs:comment "queue_submit_task bypassing AiiDA. No provenance; used for resubmits and tests." ;
+    rdfs:subClassOf :SubmitChannel .
+
+:Platform a owl:Class ;
+    rdfs:comment "OS platform of a compute node." ;
+    rdfs:subClassOf :ComputationalArtefact .
+
+:ReasoningLayer a owl:Class ;
+    rdfs:comment "pyfactxx ontology classification: plan validation at compile time, diagnosis at runtime. Zero tokens." ;
+    rdfs:subClassOf :FsmLayer .
+
+:SeebeckWorkflow a owl:Class ;
+    rdfs:comment "Seebeck coefficient: SCF convergence then DOS/Seebeck stage." ;
+    rdfs:subClassOf :ComputationalWorkflow .
+
+:VultrBareMetalNode a owl:Class ;
+    rdfs:comment "vbm-24c-256gb-amd EPYC bare-metal (policy: max 1BM+1VM)." ;
+    rdfs:subClassOf :ComputeNode ;
+    owl:disjointWith :HetznerNode,
+        :MacNode .
+
+:exit_3xx a :AiiDAExitCodeFamily ;
+    rdfs:comment "Other FLEUR workchain exits: 300/301 fleur.base general, 360 elastic stage." ;
+    owl:disjointWith :exit_362,
+        :exit_412,
+        :exit_497,
+        :exit_5xx .
+
+:hasElement a owl:ObjectProperty ;
+    rdfs:comment "Elements in the system. Range = the base ChemicalElement class. NOTE: deliberately NOT rdfs:subPropertyOf hasChemicalElements — km (Kobayashi-MaRust) has no subPropertyOf mapping; the range declaration carries the semantics." ;
+    rdfs:domain :DFTSystem ;
+    rdfs:range <http://www.semanticweb.org/ivan/ontologies/2024/0/ontomat#ChemicalElement> .
+
+:hasMitigationJUDFTWarnOnly a owl:DatatypeProperty,
+        owl:FunctionalProperty ;
+    rdfs:comment "JUDFT_WARN_ONLY staged before the engine run (pitfalls 8c/32: heavy elements abort with \"Too low eigenvalue detected\" without it). AiiDA stages it automatically; direct API must put touch JUDFT_WARN_ONLY in the spawn command." ;
+    rdfs:domain :CalculationTask ;
+    rdfs:range xsd:boolean .
+
+:hasMixingScheme a owl:ObjectProperty ;
+    rdfs:comment "SCF mixing scheme of the task." ;
+    rdfs:domain :CalculationTask ;
+    rdfs:range :MixingScheme .
+
+:hasSystem a owl:ObjectProperty ;
+    rdfs:domain :CampaignPlan ;
+    rdfs:range :DFTSystem .
+
+:inpgen a :Inpgen ;
+    rdfs:comment "inpgen input generator (lattice -> inp.xml)." ;
+    owl:disjointWith :qwen .
+
+:wc_crystal_scf a :WorkChainStep ;
+    rdfs:comment "crystal.mpds SCF (Pcrystal)." .
+
+:Broyden1 a :MixingScheme ;
+    rdfs:comment "NOT implemented in the FLEUR 6.2 build on the compute nodes (pitfall 15)." ;
+    owl:disjointWith :Broyden2 .
+
+:ExecutionMode a owl:Class ;
+    rdfs:comment "How the campaign driver schedules systems." ;
+    rdfs:subClassOf :ComputationalArtefact .
+
+:FsmLayer a owl:Class ;
+    rdfs:comment "The aiida-reharness time-scale split: which layer owns a decision." ;
+    rdfs:subClassOf :ComputationalArtefact .
+
+:HetznerNode a owl:Class ;
+    rdfs:comment "VPS with intermittent SSH drops: premature DONE, truncated out.xml." ;
+    rdfs:subClassOf :ComputeNode .
+
+:LLMEngine a owl:Class ;
+    rdfs:comment "A self-hosted LLM used as a zero-external-cost reasoning assistant for ontology tasks (axiom help, unmatched-failure diagnosis). Not a DFT engine." ;
+    rdfs:subClassOf :Engine .
+
+:MacNode a owl:Class ;
+    rdfs:comment "Afghani-578.local arm64. Wi-Fi only, sleeps without caffeinate, DHCP address." ;
+    rdfs:subClassOf :ComputeNode ;
+    owl:disjointWith :HetznerNode .
+
+:SubmitChannel a owl:Class ;
+    rdfs:comment "How a task reaches the engine: AiiDA workchain (provenance-tracked) or direct yascheduler API." ;
+    rdfs:subClassOf :ComputationalArtefact .
+
+:approvalState a :FsmStateKind ;
+    rdfs:comment "Human approval gate: risky or policy-gated actions." ;
+    owl:disjointWith :waitState .
+
+:qwen a :LLMEngine ;
+    rdfs:comment "The Mac's self-hosted LM Studio LLM (afghani-578.local, OpenAI-compatible API). Assistance with ontology: axiom authoring help, diagnosis of failures that match no experience signature. Zero external API cost." ;
+    :hasEndpoint "http://afghani-578.local:1234/v1"^^xsd:string ;
+    :hasModelId "qwen/qwen3.8-27b"^^xsd:string .
+
+:waitState a :FsmStateKind ;
+    rdfs:comment "Poll an external signal: daemon process, yascheduler DB, output file." .
+
+:BasisSetFailureMode a owl:Class ;
+    rdfs:comment "Basis-set problems: non-neutral cell, linear dependence, neighbor-list limits." ;
+    rdfs:subClassOf :PhysicsFailureMode ;
+    owl:disjointWith :InputPrepFailureMode .
+
+:Broyden2 a :MixingScheme ;
+    rdfs:comment "NOT implemented in the FLEUR 6.2 build (pitfall 15)." .
+
+:ComputationalWorkflow a owl:Class ;
+    rdfs:comment "A workflow (workchain composition) computing material properties. The subject of on-the-fly generation: the plan names a property; the ontology supplies the workflow that realizes it." ;
+    rdfs:subClassOf :ComputationalArtefact .
+
+:InputPrepFailureMode a owl:Class ;
+    rdfs:comment "Input-generation errors: XIncludes, latsys, primitive-vs-conventional cell." ;
+    rdfs:subClassOf :PhysicsFailureMode .
+
+:exit_303 a :AiiDAExitCodeFamily ;
+    rdfs:comment "SCF did not converge OR retrieved folder lacks out.xml (pitfall 39: check for SSH-drop DONE-marking)." ;
+    owl:disjointWith :exit_362,
+        :exit_3xx,
+        :exit_412,
+        :exit_497,
+        :exit_5xx .
+
+:exit_362 a :AiiDAExitCodeFamily ;
+    rdfs:comment "ERROR_DID_NOT_CONVERGE: SCF ran full iterations without converging. Physics, not infra." ;
+    owl:disjointWith :exit_412,
+        :exit_497,
+        :exit_5xx .
+
+:ComputeNode a owl:Class ;
+    rdfs:comment "A machine registered in yascheduler_nodes." ;
+    rdfs:subClassOf :ComputationalArtefact .
+
+:FsmStateKind a owl:Class ;
+    rdfs:comment "reharness FSM state kinds: where a fix routes. Decisions belong to FSM states, never to imperative runtime glue." ;
+    rdfs:subClassOf :ComputationalArtefact .
+
+:LargeMTSphereElement a owl:Class ;
+    rdfs:comment "Cations with inpgen-auto large MT spheres (2.7-2.8 bohr): high-n s valence states cannot confine; differ 2 at setup (pitfall 37)." .
+
+:MixingScheme a owl:Class ;
+    rdfs:comment "FLEUR SCF charge-density mixing (InputSchema 0.37)." ;
+    rdfs:subClassOf :ComputationalArtefact .
+
+:agentState a :FsmStateKind ;
+    rdfs:comment "LLM judgment leaf: novel diagnosis, input authoring." ;
+    owl:disjointWith :approvalState,
+        :waitState .
+
+:DFTSystem a owl:Class ;
+    rdfs:comment "A concrete material system submitted to an ab-initio campaign. The unit of serial one-system-at-a-time campaigns." ;
+    rdfs:subClassOf :ComputationalArtefact .
+
+:Engine a owl:Class ;
+    rdfs:comment "An ab-initio code." ;
+    rdfs:subClassOf :ComputationalArtefact .
+
+:WorkChainStep a owl:Class ;
+    rdfs:comment "One AiiDA workchain in a workflow composition." ;
+    rdfs:subClassOf :ComputationalArtefact .
+
+:exit_412 a :AiiDAExitCodeFamily ;
+    rdfs:comment "fleur.mpds top-level: SCF converged but downstream property calc not triggered." ;
+    owl:disjointWith :exit_497,
+        :exit_5xx .
+
+:exit_497 a :AiiDAExitCodeFamily ;
+    rdfs:comment "CDGFleurSCFOptimizer: SCF converged but lattice optimization incomplete." ;
+    owl:disjointWith :exit_5xx .
+
+:exit_5xx a :AiiDAExitCodeFamily ;
+    rdfs:comment "Infra failures, empty reason string in the dft.mpds.io listing." .
+
+:InfraFailureMode a owl:Class ;
+    rdfs:comment "Infrastructure failures: SSH drops, zombie processes, occupancy-poll bugs, spawn-channel hangup. Fix infrastructure; NEVER answer with SCF parameter tuning." ;
+    rdfs:subClassOf :EngineFailureMode ;
+    owl:disjointWith :PhysicsFailureMode .
+
+:AiiDAExitCodeFamily a owl:Class ;
+    rdfs:comment "Exit-code family of a finished process (dft.mpds.io listing convention)." ;
+    rdfs:subClassOf :ComputationalArtefact .
+
+:codeState a :FsmStateKind ;
+    rdfs:comment "Deterministic code leaf: run the fix command, no tokens." ;
+    owl:disjointWith :agentState,
+        :approvalState,
+        :waitState .
+
+:EngineFailureMode a owl:Class ;
+    rdfs:comment "A class of engine failures with known detection, cause and fix." ;
+    rdfs:subClassOf :ComputationalArtefact .
+
+:PhysicsFailureMode a owl:Class ;
+    rdfs:comment "Physics-level failures: convergence, ghost states, MT-sphere confinement, basis set." ;
+    rdfs:subClassOf :EngineFailureMode .
+
+:CampaignPlan a owl:Class ;
+    rdfs:comment "A compiled aiida-reharness campaign: systems, tasks, execution rules. The subject of the PRD gate." ;
+    rdfs:subClassOf :ComputationalArtefact .
+
+:ComputationalArtefact a owl:Class ;
+    rdfs:comment "Root of the aiida-reharness computation layer. Additive over the base materials ontology." .
+
+:CalculationTask a owl:Class ;
+    rdfs:comment "One engine run (SCF, geometry optimization, phonons). Maps to an AiiDA CalcJob or a direct yascheduler task." ;
+    rdfs:subClassOf :ComputationalArtefact .
+
+:HeavyElement a owl:Class ;
+    rdfs:comment "f-electron elements: lanthanides + actinides. Ghost states (JUDFT_WARN_ONLY), 4f occupation fluctuation is normal (pitfalls 8c, 9)." .
+
