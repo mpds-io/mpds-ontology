@@ -116,6 +116,49 @@
                         owl:onProperty :hasTargetProperty ;
                         owl:someValuesFrom <http://www.semanticweb.org/ivan/ontologies/2024/0/ontomat#Property> ] ) ] .
 
+:computedBy a owl:ObjectProperty ;
+    rdfs:comment "The executable workflow that computes the equation's quantities (realizedBy binds material properties to workflows; computedBy binds equations to them)." ;
+    rdfs:domain :PhysicalEquation ;
+    rdfs:range :ComputationalWorkflow .
+
+:derivesFrom a owl:ObjectProperty,
+        owl:TransitiveProperty ;
+    rdfs:comment "The approximation relation: a derived equation derivesFrom a more fundamental one (Kohn-Sham derivesFrom Schroedinger). Transitive: chains of approximations compose; every equation here reaches eq_schroedinger in finitely many steps." ;
+    rdfs:domain :PhysicalEquation ;
+    rdfs:range :PhysicalEquation .
+
+:eq_birch_murnaghan a :PhysicalEquation ;
+    rdfs:comment "3rd-order Birch-Murnaghan EOS: the analytic form fitted to the fleur.eos volume scan; its B_0 parameter IS the bulk modulus (prop_bulk_modulus)." ;
+    :computedBy :wf_fleur_eos ;
+    :derivesFrom :eq_dft_energy ;
+    :hasDerivationLevel "heuristic"^^xsd:string ;
+    :hasLatexForm "E(V) = E_0 + \\frac{9V_0B_0}{16}\\left[\\left(\\frac{V_0}{V}-1\\right)^3 B_0'+ \\left(\\frac{V_0}{V}-1\\right)^2\\left(6-4\\frac{V_0}{V}\\right)\\right]"^^xsd:string ;
+    :hasSymPyForm "Eq(E_c, 9*B_0*V_0*(B_0'*(-1 + V_0/V)**3 + (-1 + V_0/V)**2*(6 - 4*V_0/V))/16 + E_0)"^^xsd:string .
+
+:eq_mae_scan a :PhysicalEquation ;
+    rdfs:comment "Magnetization-rotation scan: the symmetry form the fleur.mae workchain fits; K_u = E(90°) − E(0°) is the anisotropy (prop_magnetic_anisotropy)." ;
+    :computedBy :wf_fleur_mae ;
+    :derivesFrom :eq_dft_energy ;
+    :hasDerivationLevel "heuristic"^^xsd:string ;
+    :hasLatexForm "E(\\phi) = E_0 + K_u \\sin^2(\\phi)"^^xsd:string ;
+    :hasSymPyForm "Eq(E_phi, E_0 + K_u*sin(phi)**2)"^^xsd:string .
+
+:eq_phonon_dispersion a :PhysicalEquation ;
+    rdfs:comment "Phonon dispersion (monatomic-chain form): the textbook form of the finite-displacement frequencies the phonopy.fleur route computes (prop_phonon_spectrum). The supercell force constants D come from eq_hellmann_feynman at displaced geometries." ;
+    :computedBy :wf_fleur_phonon ;
+    :derivesFrom :eq_hellmann_feynman ;
+    :hasDerivationLevel "heuristic"^^xsd:string ;
+    :hasLatexForm "\\omega(k) = 2\\sqrt{D/m}\\,\\left|\\sin\\left(\\frac{ka}{2}\\right)\\right|"^^xsd:string ;
+    :hasSymPyForm "Eq(omega, 2*sqrt(D)*Abs(sin(a*k/2))/sqrt(m))"^^xsd:string .
+
+:eq_seebeck_mott a :PhysicalEquation ;
+    rdfs:comment "Mott-form Seebeck: the degenerate-limit transport coefficient from the Kohn-Sham band structure (fleur.dos_seebeck; prop_seebeck)." ;
+    :computedBy :wf_fleur_seebeck ;
+    :derivesFrom :eq_kohn_sham ;
+    :hasDerivationLevel "approximate"^^xsd:string ;
+    :hasLatexForm "S = -\\frac{\\pi^2 k_B^2 T}{3e}\\frac{d\\ln\\sigma(\\varepsilon)}{d\\varepsilon}\\Big|_{\\varepsilon_F}"^^xsd:string ;
+    :hasSymPyForm "Eq(S, -3.96583751701583e-28*pi**2*T*Derivative(log(sigma_epsilon), epsilon))"^^xsd:string .
+
 :exit_0 a :AiiDAExitCodeFamily ;
     rdfs:comment "Success." ;
     owl:disjointWith :exit_303,
@@ -124,6 +167,12 @@
         :exit_412,
         :exit_497,
         :exit_5xx .
+
+:hasDerivationLevel a owl:DatatypeProperty,
+        owl:FunctionalProperty ;
+    rdfs:comment "Approximation level of the derivation (functional: one level per equation). exact / approximate / heuristic." ;
+    rdfs:domain :PhysicalEquation ;
+    rdfs:range xsd:string .
 
 :hasDetectedClass a owl:ObjectProperty ;
     rdfs:comment "The plan-level detection class that flags this failure mode pre-emptively (range: the detection classes above)." ;
@@ -150,6 +199,11 @@
 :hasFix a owl:DatatypeProperty ;
     rdfs:comment "The known fix: exact command or action, from the collected experience." ;
     rdfs:domain :EngineFailureMode ;
+    rdfs:range xsd:string .
+
+:hasLatexForm a owl:DatatypeProperty ;
+    rdfs:comment "MathJax-ready LaTeX of the equation, as typed in the literature." ;
+    rdfs:domain :PhysicalEquation ;
     rdfs:range xsd:string .
 
 :hasModelId a owl:DatatypeProperty ;
@@ -186,6 +240,11 @@
     rdfs:comment "Composition: a workflow runs these workchain steps." ;
     rdfs:domain :ComputationalWorkflow ;
     rdfs:range :WorkChainStep .
+
+:hasSymPyForm a owl:DatatypeProperty ;
+    rdfs:comment "str() of the SymPy Eq in physics.py — byte-identical by construction; tests/test_physics_parity.py fails loud on drift." ;
+    rdfs:domain :PhysicalEquation ;
+    rdfs:range xsd:string .
 
 :hasYaschedulerKey a owl:DatatypeProperty ;
     rdfs:comment "The yascheduler engine config section key ([engine.<key>])." ;
@@ -353,11 +412,6 @@
     :hasStep :wc_crystal_scf,
         :wc_crystal_seebeck .
 
-:wf_fleur_seebeck a :SeebeckWorkflow ;
-    rdfs:comment "FLEUR route: fleur.mpds SCF then fleur.dos_seebeck." ;
-    :hasStep :wc_fleur_dos,
-        :wc_fleur_scf .
-
 <https://mpds.io/ontology.rdf> a owl:Ontology ;
     rdfs:comment "aiida-reharness extension for the MPDS materials ontology: computation, campaign-plan and experience layers. Additive-only over the base; generated by gen_aiida_reharness.py." ;
     owl:imports <http://www.semanticweb.org/ivan/ontologies/2024/0/ontomat> .
@@ -387,10 +441,10 @@
     rdfs:comment "FLEUR task on the direct yascheduler API (no AiiDA staging): spawn must carry nohup and JUDFT_WARN_ONLY itself (pitfalls 31, 32). Gates: hasSpawnNohup AND hasMitigationJUDFTWarnOnly must both be true." ;
     rdfs:subClassOf [ a owl:Restriction ;
             owl:hasValue true ;
-            owl:onProperty :hasSpawnNohup ],
+            owl:onProperty :hasMitigationJUDFTWarnOnly ],
         [ a owl:Restriction ;
             owl:hasValue true ;
-            owl:onProperty :hasMitigationJUDFTWarnOnly ],
+            owl:onProperty :hasSpawnNohup ],
         :CalculationTask ;
     owl:equivalentClass [ a owl:Class ;
             owl:intersectionOf ( :CalculationTask [ a owl:Restriction ;
@@ -493,6 +547,14 @@
 
 :darwin a :Platform .
 
+:eq_hellmann_feynman a :PhysicalEquation ;
+    rdfs:comment "Forces from the converged DFT total energy: the bridge from eq_dft_energy to geometry optimization and the fleur.forces workchain. Exact under Born-Oppenheimer (clamped nuclei) given an exactly converged density." ;
+    :computedBy :wf_fleur_forces ;
+    :derivesFrom :eq_kohn_sham ;
+    :hasDerivationLevel "exact"^^xsd:string ;
+    :hasLatexForm "F_i = -\\frac{\\partial E}{\\partial x_i}"^^xsd:string ;
+    :hasSymPyForm "Eq(F, -Derivative(E, x))"^^xsd:string .
+
 :fleur a :FLEUR ;
     rdfs:comment "The [engine.fleur] yascheduler engine: FLEUR MaX 6.2, platforms linux darwin." ;
     owl:disjointWith :inpgen,
@@ -578,6 +640,11 @@
 :wc_phonon a :WorkChainStep ;
     rdfs:comment "Phonon stage: FLEUR phonon workflow / CRYSTAL FREQCALC (+PREOPTGEOM INSIDE the FREQCALC block, never a sibling keyword)." .
 
+:wf_fleur_seebeck a :SeebeckWorkflow ;
+    rdfs:comment "FLEUR route: fleur.mpds SCF then fleur.dos_seebeck." ;
+    :hasStep :wc_fleur_dos,
+        :wc_fleur_scf .
+
 :ConvergenceFailureMode a owl:Class ;
     rdfs:comment "SCF/geometry convergence." ;
     rdfs:subClassOf :PhysicsFailureMode ;
@@ -605,6 +672,26 @@
     rdfs:subClassOf :ComputeNode ;
     owl:disjointWith :HetznerNode,
         :MacNode .
+
+:eq_dft_energy a :PhysicalEquation ;
+    rdfs:comment "The DFT total-energy functional: the variational object the SCF cycle minimizes; the energy whose differences the EOS/MAE workflows fit. The SymPy form is the functional-equation spelling (not an Eq — DFT energy is a functional of the density)." ;
+    :derivesFrom :eq_schroedinger ;
+    :hasDerivationLevel "approximate"^^xsd:string ;
+    :hasLatexForm "E[n] = T_s[n] + \\int v_\\mathrm{ext} n\\,d\\mathbf{r} + J[n] + E_\\mathrm{xc}[n]"^^xsd:string ;
+    :hasSymPyForm "FunctionalForm:E[n] = T_s[n] + Integral(v_ext*n, r) + J[n] + E_xc[n]"^^xsd:string .
+
+:eq_kohn_sham a :PhysicalEquation ;
+    rdfs:comment "The Kohn-Sham equations: exact-in-principle mapping of the interacting system onto non-interacting orbitals; approximations enter through the exchange-correlation functional." ;
+    :derivesFrom :eq_schroedinger ;
+    :hasDerivationLevel "approximate"^^xsd:string ;
+    :hasLatexForm "\\left(-\\frac{1}{2}\\nabla^2 + v_\\mathrm{eff}\\right)\\psi_i = \\varepsilon_i\\psi_i"^^xsd:string ;
+    :hasSymPyForm "Eq(psi_i*(-nabla**2/2 + v_eff), eps_i*psi_i)"^^xsd:string .
+
+:eq_schroedinger a :PhysicalEquation ;
+    rdfs:comment "The time-independent Schrödinger equation — the ROOT of the physics-derivation DAG. Non-relativistic stationary-state quantum mechanics; every DFT quantity in this ontology is derived from it by the chain below." ;
+    :hasDerivationLevel "exact"^^xsd:string ;
+    :hasLatexForm "\\hat{H}\\Psi = E\\Psi"^^xsd:string ;
+    :hasSymPyForm "Eq(H*Psi, E*Psi)"^^xsd:string .
 
 :exit_3xx a :AiiDAExitCodeFamily ;
     rdfs:comment "Other FLEUR workchain exits: 300/301 fleur.base general, 360 elastic stage." ;
@@ -689,10 +776,6 @@
 :Broyden2 a :MixingScheme ;
     rdfs:comment "NOT implemented in the FLEUR 6.2 build (pitfall 15)." .
 
-:ComputationalWorkflow a owl:Class ;
-    rdfs:comment "A workflow (workchain composition) computing material properties. The subject of on-the-fly generation: the plan names a property; the ontology supplies the workflow that realizes it." ;
-    rdfs:subClassOf :ComputationalArtefact .
-
 :InputPrepFailureMode a owl:Class ;
     rdfs:comment "Input-generation errors: XIncludes, latsys, primitive-vs-conventional cell." ;
     rdfs:subClassOf :PhysicsFailureMode .
@@ -710,6 +793,10 @@
     owl:disjointWith :exit_412,
         :exit_497,
         :exit_5xx .
+
+:ComputationalWorkflow a owl:Class ;
+    rdfs:comment "A workflow (workchain composition) computing material properties. The subject of on-the-fly generation: the plan names a property; the ontology supplies the workflow that realizes it." ;
+    rdfs:subClassOf :ComputationalArtefact .
 
 :ComputeNode a owl:Class ;
     rdfs:comment "A machine registered in yascheduler_nodes." ;
@@ -780,6 +867,10 @@
 
 :CampaignPlan a owl:Class ;
     rdfs:comment "A compiled aiida-reharness campaign: systems, tasks, execution rules. The subject of the PRD gate." ;
+    rdfs:subClassOf :ComputationalArtefact .
+
+:PhysicalEquation a owl:Class ;
+    rdfs:comment "A named solid-state physics equation, carried as data (hasLatexForm, hasSymPyForm) — NEVER as DL axioms: description logic cannot express calculus. The executable content lives in physics.py (SymPy) and the AiiDA workchains; the ontology carries the derivation structure and the workflow bindings." ;
     rdfs:subClassOf :ComputationalArtefact .
 
 :ComputationalArtefact a owl:Class ;

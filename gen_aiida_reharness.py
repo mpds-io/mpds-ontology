@@ -672,6 +672,10 @@ ind('pf_stale_waiting_wedge', ['InfraFailureMode'],
 from north_star import NORTH_STAR
 parts.extend(NORTH_STAR)
 
+# --- physics-derivation layer: Schroedinger root + approximation DAG ---
+from physics_layer import PHYSICS_LAYER
+parts.extend(PHYSICS_LAYER)
+
 w('</rdf:RDF>')
 
 with open(OUT, 'w') as f:

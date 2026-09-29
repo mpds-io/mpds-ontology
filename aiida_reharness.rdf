@@ -1100,4 +1100,114 @@
 		</owl:Class>
 	</owl:equivalentClass>
 </owl:Class>
+<!-- ============ PHYSICS-DERIVATION LAYER ========================== -->
+<owl:Class rdf:about="https://mpds.io/ontology#PhysicalEquation">
+	<rdfs:subClassOf rdf:resource="https://mpds.io/ontology#ComputationalArtefact"/>
+	<rdfs:comment>A named solid-state physics equation, carried as data (hasLatexForm, hasSymPyForm) — NEVER as DL axioms: description logic cannot express calculus. The executable content lives in physics.py (SymPy) and the AiiDA workchains; the ontology carries the derivation structure and the workflow bindings.</rdfs:comment>
+</owl:Class>
+<owl:ObjectProperty rdf:about="https://mpds.io/ontology#derivesFrom">
+	<rdf:type rdf:resource="http://www.w3.org/2002/07/owl#TransitiveProperty"/>
+	<rdfs:domain rdf:resource="https://mpds.io/ontology#PhysicalEquation"/>
+	<rdfs:range rdf:resource="https://mpds.io/ontology#PhysicalEquation"/>
+	<rdfs:comment>The approximation relation: a derived equation derivesFrom a more fundamental one (Kohn-Sham derivesFrom Schroedinger). Transitive: chains of approximations compose; every equation here reaches eq_schroedinger in finitely many steps.</rdfs:comment>
+</owl:ObjectProperty>
+<owl:DatatypeProperty rdf:about="https://mpds.io/ontology#hasDerivationLevel">
+	<rdf:type rdf:resource="http://www.w3.org/2002/07/owl#FunctionalProperty"/>
+	<rdfs:domain rdf:resource="https://mpds.io/ontology#PhysicalEquation"/>
+	<rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
+	<rdfs:comment>Approximation level of the derivation (functional: one level per equation). exact / approximate / heuristic.</rdfs:comment>
+</owl:DatatypeProperty>
+<owl:ObjectProperty rdf:about="https://mpds.io/ontology#computedBy">
+	<rdfs:domain rdf:resource="https://mpds.io/ontology#PhysicalEquation"/>
+	<rdfs:range rdf:resource="https://mpds.io/ontology#ComputationalWorkflow"/>
+	<rdfs:comment>The executable workflow that computes the equation's quantities (realizedBy binds material properties to workflows; computedBy binds equations to them).</rdfs:comment>
+</owl:ObjectProperty>
+<owl:DatatypeProperty rdf:about="https://mpds.io/ontology#hasLatexForm">
+	<rdfs:domain rdf:resource="https://mpds.io/ontology#PhysicalEquation"/>
+	<rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
+	<rdfs:comment>MathJax-ready LaTeX of the equation, as typed in the literature.</rdfs:comment>
+</owl:DatatypeProperty>
+<owl:DatatypeProperty rdf:about="https://mpds.io/ontology#hasSymPyForm">
+	<rdfs:domain rdf:resource="https://mpds.io/ontology#PhysicalEquation"/>
+	<rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
+	<rdfs:comment>str() of the SymPy Eq in physics.py — byte-identical by construction; tests/test_physics_parity.py fails loud on drift.</rdfs:comment>
+</owl:DatatypeProperty>
+<rdf:Description rdf:about="https://mpds.io/ontology#eq_schroedinger">
+	<rdf:type rdf:resource="https://mpds.io/ontology#PhysicalEquation"/>
+	<hasDerivationLevel rdf:datatype="http://www.w3.org/2001/XMLSchema#string">exact</hasDerivationLevel>
+	<hasLatexForm rdf:datatype="http://www.w3.org/2001/XMLSchema#string">\hat{H}\Psi = E\Psi</hasLatexForm>
+	<hasSymPyForm rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Eq(H*Psi, E*Psi)</hasSymPyForm>
+	<rdfs:comment>The time-independent Schrödinger equation — the ROOT of the physics-derivation DAG. Non-relativistic stationary-state quantum mechanics; every DFT quantity in this ontology is derived from it by the chain below.</rdfs:comment>
+</rdf:Description>
+<rdf:Description rdf:about="https://mpds.io/ontology#eq_kohn_sham">
+	<rdf:type rdf:resource="https://mpds.io/ontology#PhysicalEquation"/>
+	<derivesFrom rdf:resource="https://mpds.io/ontology#eq_schroedinger"/>
+	<hasDerivationLevel rdf:datatype="http://www.w3.org/2001/XMLSchema#string">approximate</hasDerivationLevel>
+	<hasLatexForm rdf:datatype="http://www.w3.org/2001/XMLSchema#string">\left(-\frac{1}{2}\nabla^2 + v_\mathrm{eff}\right)\psi_i = \varepsilon_i\psi_i</hasLatexForm>
+	<hasSymPyForm rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Eq(psi_i*(-nabla**2/2 + v_eff), eps_i*psi_i)</hasSymPyForm>
+	<rdfs:comment>The Kohn-Sham equations: exact-in-principle mapping of the interacting system onto non-interacting orbitals; approximations enter through the exchange-correlation functional.</rdfs:comment>
+</rdf:Description>
+<rdf:Description rdf:about="https://mpds.io/ontology#eq_dft_energy">
+	<rdf:type rdf:resource="https://mpds.io/ontology#PhysicalEquation"/>
+	<derivesFrom rdf:resource="https://mpds.io/ontology#eq_schroedinger"/>
+	<hasDerivationLevel rdf:datatype="http://www.w3.org/2001/XMLSchema#string">approximate</hasDerivationLevel>
+	<hasLatexForm rdf:datatype="http://www.w3.org/2001/XMLSchema#string">E[n] = T_s[n] + \int v_\mathrm{ext} n\,d\mathbf{r} + J[n] + E_\mathrm{xc}[n]</hasLatexForm>
+	<hasSymPyForm rdf:datatype="http://www.w3.org/2001/XMLSchema#string">FunctionalForm:E[n] = T_s[n] + Integral(v_ext*n, r) + J[n] + E_xc[n]</hasSymPyForm>
+	<rdfs:comment>The DFT total-energy functional: the variational object the SCF cycle minimizes; the energy whose differences the EOS/MAE workflows fit. The SymPy form is the functional-equation spelling (not an Eq — DFT energy is a functional of the density).</rdfs:comment>
+</rdf:Description>
+<rdf:Description rdf:about="https://mpds.io/ontology#eq_hellmann_feynman">
+	<rdf:type rdf:resource="https://mpds.io/ontology#PhysicalEquation"/>
+	<derivesFrom rdf:resource="https://mpds.io/ontology#eq_kohn_sham"/>
+	<hasDerivationLevel rdf:datatype="http://www.w3.org/2001/XMLSchema#string">exact</hasDerivationLevel>
+	<hasLatexForm rdf:datatype="http://www.w3.org/2001/XMLSchema#string">F_i = -\frac{\partial E}{\partial x_i}</hasLatexForm>
+	<hasSymPyForm rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Eq(F, -Derivative(E, x))</hasSymPyForm>
+	<rdfs:comment>Forces from the converged DFT total energy: the bridge from eq_dft_energy to geometry optimization and the fleur.forces workchain. Exact under Born-Oppenheimer (clamped nuclei) given an exactly converged density.</rdfs:comment>
+</rdf:Description>
+<rdf:Description rdf:about="https://mpds.io/ontology#eq_birch_murnaghan">
+	<rdf:type rdf:resource="https://mpds.io/ontology#PhysicalEquation"/>
+	<derivesFrom rdf:resource="https://mpds.io/ontology#eq_dft_energy"/>
+	<hasDerivationLevel rdf:datatype="http://www.w3.org/2001/XMLSchema#string">heuristic</hasDerivationLevel>
+	<hasLatexForm rdf:datatype="http://www.w3.org/2001/XMLSchema#string">E(V) = E_0 + \frac{9V_0B_0}{16}\left[\left(\frac{V_0}{V}-1\right)^3 B_0'+ \left(\frac{V_0}{V}-1\right)^2\left(6-4\frac{V_0}{V}\right)\right]</hasLatexForm>
+	<hasSymPyForm rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Eq(E_c, 9*B_0*V_0*(B_0'*(-1 + V_0/V)**3 + (-1 + V_0/V)**2*(6 - 4*V_0/V))/16 + E_0)</hasSymPyForm>
+	<rdfs:comment>3rd-order Birch-Murnaghan EOS: the analytic form fitted to the fleur.eos volume scan; its B_0 parameter IS the bulk modulus (prop_bulk_modulus).</rdfs:comment>
+</rdf:Description>
+<rdf:Description rdf:about="https://mpds.io/ontology#eq_mae_scan">
+	<rdf:type rdf:resource="https://mpds.io/ontology#PhysicalEquation"/>
+	<derivesFrom rdf:resource="https://mpds.io/ontology#eq_dft_energy"/>
+	<hasDerivationLevel rdf:datatype="http://www.w3.org/2001/XMLSchema#string">heuristic</hasDerivationLevel>
+	<hasLatexForm rdf:datatype="http://www.w3.org/2001/XMLSchema#string">E(\phi) = E_0 + K_u \sin^2(\phi)</hasLatexForm>
+	<hasSymPyForm rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Eq(E_phi, E_0 + K_u*sin(phi)**2)</hasSymPyForm>
+	<rdfs:comment>Magnetization-rotation scan: the symmetry form the fleur.mae workchain fits; K_u = E(90°) − E(0°) is the anisotropy (prop_magnetic_anisotropy).</rdfs:comment>
+</rdf:Description>
+<rdf:Description rdf:about="https://mpds.io/ontology#eq_phonon_dispersion">
+	<rdf:type rdf:resource="https://mpds.io/ontology#PhysicalEquation"/>
+	<derivesFrom rdf:resource="https://mpds.io/ontology#eq_hellmann_feynman"/>
+	<hasDerivationLevel rdf:datatype="http://www.w3.org/2001/XMLSchema#string">heuristic</hasDerivationLevel>
+	<hasLatexForm rdf:datatype="http://www.w3.org/2001/XMLSchema#string">\omega(k) = 2\sqrt{D/m}\,\left|\sin\left(\frac{ka}{2}\right)\right|</hasLatexForm>
+	<hasSymPyForm rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Eq(omega, 2*sqrt(D)*Abs(sin(a*k/2))/sqrt(m))</hasSymPyForm>
+	<rdfs:comment>Phonon dispersion (monatomic-chain form): the textbook form of the finite-displacement frequencies the phonopy.fleur route computes (prop_phonon_spectrum). The supercell force constants D come from eq_hellmann_feynman at displaced geometries.</rdfs:comment>
+</rdf:Description>
+<rdf:Description rdf:about="https://mpds.io/ontology#eq_seebeck_mott">
+	<rdf:type rdf:resource="https://mpds.io/ontology#PhysicalEquation"/>
+	<derivesFrom rdf:resource="https://mpds.io/ontology#eq_kohn_sham"/>
+	<hasDerivationLevel rdf:datatype="http://www.w3.org/2001/XMLSchema#string">approximate</hasDerivationLevel>
+	<hasLatexForm rdf:datatype="http://www.w3.org/2001/XMLSchema#string">S = -\frac{\pi^2 k_B^2 T}{3e}\frac{d\ln\sigma(\varepsilon)}{d\varepsilon}\Big|_{\varepsilon_F}</hasLatexForm>
+	<hasSymPyForm rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Eq(S, -3.96583751701583e-28*pi**2*T*Derivative(log(sigma_epsilon), epsilon))</hasSymPyForm>
+	<rdfs:comment>Mott-form Seebeck: the degenerate-limit transport coefficient from the Kohn-Sham band structure (fleur.dos_seebeck; prop_seebeck).</rdfs:comment>
+</rdf:Description>
+<rdf:Description rdf:about="https://mpds.io/ontology#eq_birch_murnaghan">
+	<computedBy rdf:resource="https://mpds.io/ontology#wf_fleur_eos"/>
+</rdf:Description>
+<rdf:Description rdf:about="https://mpds.io/ontology#eq_mae_scan">
+	<computedBy rdf:resource="https://mpds.io/ontology#wf_fleur_mae"/>
+</rdf:Description>
+<rdf:Description rdf:about="https://mpds.io/ontology#eq_phonon_dispersion">
+	<computedBy rdf:resource="https://mpds.io/ontology#wf_fleur_phonon"/>
+</rdf:Description>
+<rdf:Description rdf:about="https://mpds.io/ontology#eq_seebeck_mott">
+	<computedBy rdf:resource="https://mpds.io/ontology#wf_fleur_seebeck"/>
+</rdf:Description>
+<rdf:Description rdf:about="https://mpds.io/ontology#eq_hellmann_feynman">
+	<computedBy rdf:resource="https://mpds.io/ontology#wf_fleur_forces"/>
+</rdf:Description>
 </rdf:RDF>
